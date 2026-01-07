@@ -10,13 +10,13 @@ from selenium.webdriver.chrome.options import Options
 driver_path = ChromeDriverManager().install()
 
 # create a new Chrome browser instance
-service = Service(driver_path)
-driver = webdriver.Chrome(service=service)
-driver.maximize_window()
 options = Options()
 options.add_argument("--incognito")
 
-driver = webdriver.Chrome(options=options)
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options=options)
+driver.maximize_window()
+
 
 
 # 1. Open page
@@ -24,16 +24,17 @@ driver.get("https://www.target.com/")
 sleep(2)
 
 # 2. Click Account button
-driver.find_element(By.XPATH, "//*[text()='Account']").click()
+driver.find_element(By.XPATH, "//span[text()='Account']").click()
 sleep(2)
 
 # 4. Verify SignIn page opened
-header = driver.find_element(By.XPATH, "//*[text()='Sign in' or text()='create']")
+header = driver.find_element(By.XPATH,"//button[contains(text(),'Sign in')]")
+header.click()
 print("Sign in text visible:", header.text)
+# 3. Click SignIn button
 
-# 3. Click SignIn button from side navigation
-driver.find_element(By.XPATH, "/html/body/div[9]/div/div/div[2]/ul/div/button").click()
-sleep(2)
+#driver.find_element(By.XPATH, "//button[text()='Sign in or create account']").click()
+#sleep(2)
 
 
 # SignIn button is shown
