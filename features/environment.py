@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
+from selenium.webdriver.chrome.options import Options
 
 def browser_init(context):
     """
@@ -9,11 +9,13 @@ def browser_init(context):
     """
     driver_path = ChromeDriverManager().install()
     service = Service(driver_path)
-    context.driver = webdriver.Chrome(service=service)
 
+    options = Options()
+    options.add_argument("--incognito")
+
+    context.driver = webdriver.Chrome(service=service, options=options)
     context.driver.maximize_window()
     context.driver.implicitly_wait(4)
-
 
 def before_scenario(context, scenario):
     print('\nStarted scenario: ', scenario.name)
