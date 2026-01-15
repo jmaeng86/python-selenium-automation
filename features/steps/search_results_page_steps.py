@@ -1,38 +1,38 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from behave import given, when, then
 from time import sleep
-ADD_TO_CART = (By.CSS_SELECTOR, "[aria-label*= 'Add PlayStation 5']")
-SIDEBAR_ADD = (By.CSS_SELECTOR, "[data-test='orderPickupButton']")
-SIDEBAR_CLOSE = (By.CSS_SELECTOR, "[aria-label='close']")
+
+
 SEARCH_RESULTS_TEXT = (By.XPATH, "//div[contains(@class,'styles_listingPageResultsCount')]")
-PLAYSTATION_TEXT =  (By.XPATH, "//*[contains(text(),'Playstation 5')]")
+ADD_TO_CART_BTN = (By.CSS_SELECTOR, "[id*='addToCartButton']")
+SIDE_NAV_ADD_TO_CART_BTN = (By.CSS_SELECTOR, "[data-test='content-wrapper'] [id*='addToCart']")
+SIDE_NAV_PRODUCT_NAME = (By.CSS_SELECTOR, "[data-test='content-wrapper'] h4")
 
-@when('Click first result')
-def click_first_result(context):
-    add_to_cart = context.driver.find_element(*ADD_TO_CART)
-    add_to_cart.click()
-    sleep(5)
-@when('Click Add to cart on sidebar')
+
+@when('Click on Add to Cart button')
 def click_add_to_cart(context):
-    add_sidebar = context.driver.find_element(*SIDEBAR_ADD)
-    add_sidebar.click()
-    sleep(5)
+    context.driver.find_element(*ADD_TO_CART_BTN).click()  # always clicks on 1st Add to cart btn
+    context.driver.wait.until(
+        EC.element_to_be_clickable(SIDE_NAV_ADD_TO_CART_BTN),
+        message='Side navigation Add To Cart Btn not clickable'
+    )
 
-@when('Close Sidebar')
-def close_sidebar(context):
-    sidebar_close = context.driver.find_element(*SIDEBAR_CLOSE)
-    sidebar_close.click()
-    sleep(5)
+
+@when('Store product name')
+def store_product_name(context):
+    context.product_before_adding = context.driver.find_element(*SIDE_NAV_PRODUCT_NAME).text
+    # print("Name saved: ")
+    # print(context.product_before_adding)
+
+
+@when('Confirm Add to Cart button from side navigation')
+def side_nav_click_add_to_cart(context):
+    context.driver.find_element(*SIDE_NAV_ADD_TO_CART_BTN).click()
+    sleep(2)
 
 
 @then('Search results for {expected_product} are shown')
 def verify_search_results(context, expected_product):
     actual_text = context.driver.find_element(*SEARCH_RESULTS_TEXT).text
-    print(f'Expected text {expected_product} is in actual text {actual_text}')
     assert expected_product in actual_text, f'Expected text {expected_product} not in actual text {actual_text}'
-
-@then('Verify {expected_product} is added to cart')
-def verify_add_to_cart(context, expected_product):
-    playstation_text = context.driver.find_element(*PLAYSTATION_TEXT).text
-    print(f'Expected text {expected_product} is in actual text {playstation_text}')
-    assert expected_product in playstation_text, f'Expected text {expected_product} not in actual text {playstation_text}'
