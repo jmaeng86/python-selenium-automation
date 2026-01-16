@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from behave import given, when, then
 from time import sleep
+from selenium.webdriver.support import expected_conditions as EC
 
 HELP_TEXT = (By.XPATH, "//h1[text()='Help']")
 QUESTIONS = (By.XPATH, "//h2[contains(.,'question?')]")

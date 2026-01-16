@@ -1,17 +1,17 @@
 from selenium.webdriver.common.by import By
 from behave import given, then
 from time import sleep
-
+from selenium.webdriver.support import expected_conditions as EC
 
 COLOR_OPTIONS = (By.CSS_SELECTOR, "li[class*='CarouselItem'] img")
 SELECTED_COLOR = (By.CSS_SELECTOR, "[data-test='@web/VariationComponent'] div")
-
+SEARCH_FIELD = (By.ID, 'search')
 
 @given('Open target product A-91269718 page')
 def open_target(context):
     context.driver.get(f'https://www.target.com/p/wranglers-men-39-s-relaxed-fit-straight-jeans/-/A-91269718?preselect=90919011#lnk=sametab')
-    sleep(5)
-
+    #sleep(5)
+    context.driver.wait.until(EC.element_to_be_clickable(SEARCH_FIELD), message='Search bar not clickable')
 
 @then('Verify user can click through colors')
 def click_and_verify_colors(context):
@@ -20,11 +20,11 @@ def click_and_verify_colors(context):
 
     colors = context.driver.find_elements(*COLOR_OPTIONS)  # [webelement1, webelement2, webelement3]
     print(colors)
-
+    context.driver.wait.until(EC.element_to_be_clickable(colors), message='colors not clickable')
     for c in colors:
         c.click()
         # for visibility only:
-        sleep(0.5)
+        #sleep(0.5)
 
         selected_color = context.driver.find_element(*SELECTED_COLOR).text  # 'Color\nBlack'
         print('Current color', selected_color)

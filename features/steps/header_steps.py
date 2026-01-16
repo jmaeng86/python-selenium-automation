@@ -1,11 +1,13 @@
 from selenium.webdriver.common.by import By
 from behave import given, when, then
 from time import sleep
+from selenium.webdriver.support import expected_conditions as EC
+
 SEARCH_FIELD = (By.ID, 'search')
 SEARCH_ICON = (By.CSS_SELECTOR, "[data-test='@web/Search/SearchButton']")
 CART_ICON = (By.CSS_SELECTOR, "[data-test='@web/CartIcon']")
 HEADER_LINKS = (By.CSS_SELECTOR, "[data-test*='@web/GlobalHeader/UtilityHeader/']")
-
+SEARCH_RESULTS_TEXT = (By.XPATH, "//div[contains(@class,'styles_listingPageResultsCount')]")
 
 @when('Click on cart icon')
 def click_cart(context):
@@ -16,8 +18,8 @@ def click_cart(context):
 def search_product(context, product):
     context.driver.find_element(*SEARCH_FIELD).send_keys(product)
     context.driver.find_element(*SEARCH_ICON).click()
-    sleep(10)
-
+    #sleep(10)
+    context.driver.wait.until(EC.presence_of_element_located(SEARCH_RESULTS_TEXT), message= 'search results located')
 
 @then('Verify {expected_amount} top header links are shown')
 def verify_top_links_shown(context, expected_amount):
