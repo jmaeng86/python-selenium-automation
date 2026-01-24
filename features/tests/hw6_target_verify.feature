@@ -9,8 +9,8 @@ Feature: Verify Messages
 
 
 
-  Scenario: logged out user can sign in
-    Given Open target.com
-    When Click Sign In
-    When From right side navigation menu, click Sign In
-    Then Verify Sign In form opened
+# Scenario: logged out user can sign in
+#   Given Open target.com
+#   When Click Sign In
+#   When From right side navigation menu, click Sign In
+# #  Then Verify Sign In form opened

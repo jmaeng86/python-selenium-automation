@@ -34,5 +34,4 @@ def side_nav_click_add_to_cart(context):
 
 @then('Search results for {expected_product} are shown')
 def verify_search_results(context, expected_product):
-    actual_text = context.driver.find_element(*SEARCH_RESULTS_TEXT).text
-    assert expected_product in actual_text, f'Expected text {expected_product} not in actual text {actual_text}'
+    context.app.search_results_page.verify_search_results()

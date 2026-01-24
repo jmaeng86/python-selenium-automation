@@ -16,10 +16,7 @@ def click_cart(context):
 
 @when('Search for {product}')
 def search_product(context, product):
-    context.driver.find_element(*SEARCH_FIELD).send_keys(product)
-    context.driver.find_element(*SEARCH_ICON).click()
-    #sleep(10)
-    context.driver.wait.until(EC.presence_of_element_located(SEARCH_RESULTS_TEXT), message= 'search results located')
+    context.app.header.search(product)
 
 @then('Verify {expected_amount} top header links are shown')
 def verify_top_links_shown(context, expected_amount):
