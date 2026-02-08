@@ -10,13 +10,12 @@ TOTAL_TXT = (By.CSS_SELECTOR, "h2 [class*='styles_cart-summary-span']")
 
 @when('Open cart page')
 def open_cart(context):
-    context.driver.get('https://www.target.com/cart')
+    context.cart.open_cart_page()
 
 
 @then('Verify cart has {amount} item(s)')
 def verify_cart_items(context, amount):
-    context.driver.wait.until(
-        EC.presence_of_element_located(TOTAL_TXT),
+    context.base_page(TOTAL_TXT,
         message='Subtotal text did not appear'
     )
 
@@ -26,15 +25,10 @@ def verify_cart_items(context, amount):
 
 @then('Verify product in cart is correct')
 def verify_product(context):
-    product_in_cart = context.driver.find_element(*PRODUCT_NAME).text
-    # print('\nProduct in cart:')
-    # print(product_in_cart)
-    expected = context.product_before_adding
-    assert product_in_cart[:20] == expected[:20],\
-        f'Expected product {expected[:20]} but got {product_in_cart[:20]}'
+    context.base_page.verify_text(PRODUCT_NAME)
+
 
 
 @then('Empty Cart message is shown')
 def verify_empty_cart_msg(context):
-    actual_text = context.driver.find_element(By.CSS_SELECTOR, "[data-test='boxEmptyMsg']").text
-    assert 'Your cart is empty' in actual_text, f"Expected 'Your cart is empty' text not in {actual_text}"
+    context.cart.verify_empty_cart()

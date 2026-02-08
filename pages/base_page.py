@@ -6,6 +6,12 @@ class Page:
     def open_url(self, url):
         self.driver.get(url)
 
+    def open_cart_url(self,url):
+        self.driver.get(url)
+
+    def get_current_url(self):
+        return self.driver.current_url
+
     def find_element(self, *locator):
         return self.driver.find_element(*locator)
 
@@ -17,4 +23,20 @@ class Page:
 
     def input_text(self, text, *locator):
         self.driver.find_element(*locator).send_keys(text)
+
+    def verify_partial_text(self, expected_partial_text, *locator):
+        actual_text = self.find_element(*locator).text
+        assert expected_partial_text in actual_text, f"Expected_text {expected_partial_text} not in actual {actual_text}"
+
+
+    def verify_text(self, expected_text, *locator):
+        actual_text = self.find_element(*locator).text
+        assert expected_text in actual_text, f"Expected_text {expected_text} but got actual {actual_text}"
+
+    def verify_url(self, expected_partial_url):
+        actual_url = self.driver.current_url
+        assert actual_url == expected_partial_url, f' Expected {expected_partial_url}, not in {actual_url}'
+
+    def sign_in_sidebar(self,*locator):
+        self.find_element(*locator).click()
 

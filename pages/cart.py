@@ -9,8 +9,16 @@ class Cart(Page):
 
     EMPTY_CART_TEXT = (By.XPATH,"//h1[contains(text(),'empty')]" )
 
-    def verify_empty_cart(self):
-        actual_text = self.driver.find_element(*self.EMPTY_CART_TEXT).text
-        assert 'Your cart is empty' in actual_text, f'Expected text "Your cart is empty" not in actual text {actual_text}'
+    def open_cart_page(self):
+        self.open_url('https://www.target.com/cart')
 
-        
+
+
+
+
+
+    def verify_empty_cart(self):
+        self.verify_partial_text('your cart is empty',*self.empty_cart_msg)
+        self.verify_url('https://www.target.com/cart')
+        self.verify_url_contains('cart')
+

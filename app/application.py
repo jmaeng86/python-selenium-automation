@@ -8,5 +8,6 @@ class Application:
 
         self.main_page = MainPage(driver)
         self.header = Header(driver)
+        self.sign_in = Header(driver)
         self.search_results_page = SearchResultsPage(driver)
         self.cart = Cart(driver)
